@@ -1,6 +1,6 @@
 # Style
 
-Lesson96 Style and Theme
+Lesson96-97 Style and Theme
 
 1.Style:样式，是给View或Window指定外观和格式的属性集合，样式能指定如高/边距/字体颜色/字体尺寸/背景颜色等属性，样式被定义在一个与布局XML文件分开的XML资源文件   中，允许与内容分开设计。
   --使用样式属性：
@@ -29,6 +29,11 @@ Lesson96 Style and Theme
     <style name="CodeFont.Red">   
             <item name="android:textColor">#FF0000</item> 
     </style>
+    可以有多层继承，如继承CodeFont和CodeFont.Red的同时，添加一个属性：
+    <style name="CodeFont.Red.Big">
+        <item name="android:textSize">60sp</item>
+    </style>
+    --注意：这种通过把名字链接在一起的继承性只对自己定义的样式有效，不能用这种方法来继承android内置的样式，要引用内置的样式，         必须使用parent属性.
 
 3.样式实例：
   在res->values->新建一个样式style96.xml样式:
@@ -67,5 +72,81 @@ Lesson96 Style and Theme
     <TextView
         style="@style/CodeFont.Red"
         android:text="@string/text96" />
+  </RelativeLayout>
+  
+4.Themes主题：主题是应用于整个Activity或应用程序的样式，而不是一个独立的View对象，当一个样式被用作主题时，Activity或应用程序中
+              的每个View对象都会使用它所支持的每个样式属性，主题是运用在清单文件里面.
+  --如果View中具体运用了样式，则样式会覆盖掉主题；
+  --自定义主题首先必须继承系统里生成的主题，如下实例：
+  在res->values->styles96.xml里再定义一个继承系统里的主题的样式AppTheme.Red：
+  <?xml version="1.0" encoding="utf-8"?>
+  <resources>
+      <style name="CodeFont" parent="@android:style/TextAppearance.Medium">
+          <item name="android:layout_width">fill_parent</item>
+          <item name="android:layout_height">wrap_content</item>
+          <item name="android:textColor">#00FF00</item>
+          <item name="android:textSize">30sp</item>
+          <item name="android:typeface">monospace</item>
+      </style>
+      <style name="CodeFont.Green">
+          <item name="android:textColor">#00FF00</item>
+      </style>
+      <style name="CodeFont.Green.Big">
+          <item name="android:textSize">60sp</item>
+      </style>
+      <style name="AppTheme.Red">
+          <item name="android:textColor">#FF0000</item>
+          <item name="android:textSize">60sp</item>
+      </style>
+  </resources>
+  将AppTheme.Red运用于主题在清单文件中：有两种方式
+  <?xml version="1.0" encoding="utf-8"?>
+  <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+      package="com.example.mackerlee.android_96">
+  
+      <application
+          android:allowBackup="true"
+          android:icon="@mipmap/ic_launcher"
+          android:label="@string/app_name"
+          android:supportsRtl="true"
+          android:theme="@style/AppTheme">  //方式一运用主题
+          <activity
+              android:name=".MainActivity"
+              android:theme="@style/AppTheme.Red"> //方式二运用主题，该例在这里运用自定义主题
+              <intent-filter>
+                  <action android:name="android.intent.action.MAIN" />
+  
+                  <category android:name="android.intent.category.LAUNCHER" />
+              </intent-filter>
+          </activity>
+      </application>
+  
+  </manifest>
+  在activity_main.xml中再定义一个TextView用于测试：
+  <?xml version="1.0" encoding="utf-8"?>
+  <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:tools="http://schemas.android.com/tools"
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:paddingBottom="@dimen/activity_vertical_margin"
+      android:paddingLeft="@dimen/activity_horizontal_margin"
+      android:paddingRight="@dimen/activity_horizontal_margin"
+      android:paddingTop="@dimen/activity_vertical_margin"
+      tools:context="com.example.mackerlee.android_96.MainActivity">
+  
+      <TextView
+          style="@style/CodeFont.Green"
+          android:text="@string/text96"
+          android:id="@+id/textView96" />
+  
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textAppearance="?android:attr/textAppearanceLarge"
+          android:text="@string/text97"
+          android:id="@+id/textView97"
+          android:layout_below="@+id/textView96"
+          android:layout_alignParentStart="true"
+          android:layout_marginTop="73dp" />
   </RelativeLayout>
  
